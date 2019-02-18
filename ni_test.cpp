@@ -34,12 +34,14 @@ int run_kinect()
 	Mat depthMat(Size(640,480),CV_16UC1);
 	Mat depthf (Size(640,480),CV_8UC1);
 	Mat rgbMat(Size(640,480),CV_8UC3,Scalar(0));
+	Mat ownMat(Size(640,480),CV_8UC3,Scalar(0));
 	
 	Freenect::Freenect freenect;
 	MyFreenectDevice& device = freenect.createDevice<MyFreenectDevice>(0);
 	
 	namedWindow("rgb",CV_WINDOW_AUTOSIZE);
 	namedWindow("depth",CV_WINDOW_AUTOSIZE);
+	namedWindow("rawdepth",CV_WINDOW_AUTOSIZE);
 	device.startVideo();
 	device.startDepth();
 	while (true)
@@ -49,6 +51,7 @@ int run_kinect()
 		imshow("rgb", rgbMat);
 		depthMat.convertTo(depthf, CV_8UC1, 255.0/2048.0);
 		imshow("depth",depthf);
+		imshow("rawdepth",depthMat);
 		char k = cvWaitKey(5);
 	}
 	device.stopVideo();
